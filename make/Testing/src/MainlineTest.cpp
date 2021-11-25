@@ -41,6 +41,8 @@ public:
 		{
 			CPPUNIT_ASSERT( (*it) >= 1 );
 			CPPUNIT_ASSERT( (*it) <= 46 );
+
+			it++;
 		}
 		
 	}
