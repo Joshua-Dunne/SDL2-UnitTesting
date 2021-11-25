@@ -35,10 +35,12 @@ public:
 	{
 		testProd->generateLottery();
 
-		for(auto num : testProd->genSet)
+		std::set<int>::iterator it = testProd->genSet.begin();
+
+		while (it != testProd->genSet.end())
 		{
-			CPPUNIT_ASSERT( num >= 1 );
-			CPPUNIT_ASSERT( num <= 46 );
+			CPPUNIT_ASSERT( (*it) >= 1 );
+			CPPUNIT_ASSERT( (*it) <= 46 );
 		}
 		
 	}
