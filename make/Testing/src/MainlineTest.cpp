@@ -16,13 +16,11 @@ public:
 	Production* testProd;
 	void setUp()
 	{
-		std::cout << "setup";
 		testProd = new Production();
 	}
 
 	void tearDown() 
 	{
-		std::cout << " teardown";
 		delete testProd;
 	}
 	
