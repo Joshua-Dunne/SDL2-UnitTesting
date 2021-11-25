@@ -7,7 +7,7 @@
 #include "cppunit/TestCaller.h"
 #include "cppunit/TestRunner.h"
 #include "cppunit/TestResult.h"
-#include <cppunit/ui/text/TestRunner.h>
+#include "cppunit/ui/text/TestRunner.h"
 
 using namespace std;
 
@@ -27,19 +27,26 @@ public:
 	void testGeneration()
 	{
 		testProd->generateLottery();
+		CPPUNIT_ASSERT( testProd->genSet.size() != 0 );
 		CPPUNIT_ASSERT( testProd->genSet.size() == 6 );
 	}
 
 	void testRange()
 	{
 		testProd->generateLottery();
-		CPPUNIT_ASSERT( testProd->checkRange() );
+
+		for(auto num : testProd->genSet)
+		{
+			CPPUNIT_ASSERT( num >= 1 );
+			CPPUNIT_ASSERT( num <= 46 );
+		}
+		
 	}
 
 	void testDuplicates()
 	{
 		testProd->generateLottery();
-		CPPUNIT_ASSERT( testProd->checkDuplicates() );
+		CPPUNIT_ASSERT( testProd->genSet.size() == 6 );
 	}
 
 	static CppUnit::Test *suite()
