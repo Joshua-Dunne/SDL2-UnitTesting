@@ -11,7 +11,7 @@
 
 using namespace std;
 
-class LotteryNumberTest : public CppUnit::TestCase { 
+class LotteryNumberTest : public CppUnit::TestCase {
 public:
 	Production* testProd;
 	void setUp()
@@ -19,16 +19,20 @@ public:
 		testProd = new Production();
 	}
 
-	void tearDown() 
+	void tearDown()
 	{
 		delete testProd;
 	}
-	
+
 	void testGeneration()
 	{
 		testProd->generateLottery();
 		CPPUNIT_ASSERT( testProd->genSet.size() != 0 );
 		CPPUNIT_ASSERT( testProd->genSet.size() == 6 );
+
+		// make sure the size isn't at some random size that isn't exactly 6 or 0
+		CPPUNIT_ASSERT( !(testProd->genSet.size() > 6));
+		CPPUNIT_ASSERT( !(testProd->genSet.size() < 6) );
 	}
 
 	void testRange()
@@ -37,6 +41,7 @@ public:
 
 		std::set<int>::iterator it = testProd->genSet.begin();
 
+		// check to make sure every number is at a min of 1, and a max of 46
 		while (it != testProd->genSet.end())
 		{
 			CPPUNIT_ASSERT( (*it) >= 1 );
@@ -44,26 +49,57 @@ public:
 
 			it++;
 		}
-		
+
+		it = testProd->genSet.begin();
+
+		// secondary check to make sure no number is less than 1, and no number is greater than 46
+		while (it != testProd->genSet.end())
+		{
+			CPPUNIT_ASSERT( !((*it) < 1) );
+			CPPUNIT_ASSERT( !((*it) > 46) );
+
+			it++;
+		}
 	}
 
 	void testDuplicates()
 	{
 		testProd->generateLottery();
+
+		// first we will do the normal duplicate check, since we use a Set
 		CPPUNIT_ASSERT( testProd->genSet.size() == 6 );
+
+		// now we will do an in-depth comparison too
+		// just to make sure no number is duplicated
+		for(auto num : testProd->genSet)
+		{
+			std::set<int>::iterator it = testProd->genSet.begin();
+
+			while(it != testProd->genSet.end())
+			{
+				if(*it == num)
+				{
+					it++;
+					continue;
+				}
+
+				CPPUNIT_ASSERT(num != *it);
+				it++;
+			}
+		}
 	}
 
 	static CppUnit::Test *suite()
   	{
 		CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "ComplexNumberTest" );
 		suiteOfTests->addTest( new CppUnit::TestCaller<LotteryNumberTest>(
-							"testGeneration", 
+							"testGeneration",
 							&LotteryNumberTest::testGeneration ));
 		suiteOfTests->addTest( new CppUnit::TestCaller<LotteryNumberTest>(
-							"testRange", 
+							"testRange",
 							&LotteryNumberTest::testRange ));
 		suiteOfTests->addTest( new CppUnit::TestCaller<LotteryNumberTest>(
-							"testDuplicates", 
+							"testDuplicates",
 							&LotteryNumberTest::testDuplicates ));
 		return suiteOfTests;
   	}
