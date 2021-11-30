@@ -20,7 +20,7 @@ bool Production::checkRange()
 	{
 		for (auto number : genSet)
 		{
-			if (number <= 1 || number >= 46)
+			if (number <= 0 || number > 46)
 				return false;
 		}
 
